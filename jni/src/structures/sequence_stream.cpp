@@ -122,9 +122,6 @@ void Sequence_Stream_Engine::endCurrentSequence()
 	currentSequence->finalize();
 
 	stream.push_back(currentSequence);
-
-	PRINTF_PLATFORM("  Adding sequence %lu\n", (stream.size() - (unsigned long)1) );
-	PRINTF_PLATFORM("-------------------------------------------------------------------------\n");
 }
 
 Sequence_Stream_Engine::~Sequence_Stream_Engine()
