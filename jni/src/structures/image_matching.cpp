@@ -65,9 +65,6 @@ void Image_Matching_Engine::updateInverseIndexing_withTimeLag(std::vector<Image_
 
 bool Image_Matching_Engine::findMatch(Image_Engine *lastImage)
 {
-	#ifdef _DEBUG_
-		unsigned int cheackingCoutner = 0;
-	#endif
 	memset(needToBeChecked, 1, (int(lastImage->imageID) + 1 - PREVENT_LOOP_DETECTION_TIME_LAG_IMGS) );
 
 	float maxSimScore = -1000.0f;
@@ -92,18 +89,9 @@ bool Image_Matching_Engine::findMatch(Image_Engine *lastImage)
 					maxSimScore = tempSimScore;
 					mathcingImageTemp = tempImage;
 				}
-
-				#ifdef _DEBUG_
-					cheackingCoutner++;
-				#endif
-
 			}
 		}
 	}
-
-	#ifdef _DEBUG_
-		PRINTF_PLATFORM("Executed checks through inverse indexing: %u.\n", cheackingCoutner);
-	#endif
 
 	if(mathcingImageTemp == NULL)	return false;
 

@@ -225,11 +225,9 @@ bool PREVIeW::storeOutputMetadata()
 
 	P_SAVEALL(OUTPUT_METADATA_PATH);
 
-	#ifdef _DEBUG_
-		PRINTF_PLATFORM("Number of Used images: %u\n", (unsigned int)imageNames.size());
-		PRINTF_PLATFORM("Number of Sequence Matches: %u\n", (unsigned int)sequence_matcher->match_list.size());
-		PRINTF_PLATFORM("Number of Image Matches: %u\n", (unsigned int)image_matcher->match_list.size());
-	#endif
+	PRINTF_PLATFORM("Number of Used images: %u\n", (unsigned int)imageNames.size());
+	PRINTF_PLATFORM("Number of Sequence Matches: %u\n", (unsigned int)sequence_matcher->match_list.size());
+	PRINTF_PLATFORM("Number of Image Matches: %u\n", (unsigned int)image_matcher->match_list.size());
 
 	storeImageMatchList(*image_matcher, image_stream->stream.size(), "imageMatches");
 	return true;

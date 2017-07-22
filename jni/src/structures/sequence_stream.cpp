@@ -63,11 +63,6 @@ bool Sequence_Stream_Engine::isTimeToCreateNewSequence()
 	if(currentSequence->image_members.size() >= 2)
 	{
 		float newOld_ratio = (float(Vocabulary_tree->nonZeroDescriptorIDs_seq.size()) - previous_numberOfVisualWords) / float(Vocabulary_tree->NumOfVisualWordsTempG);
-		#ifdef _DEBUG_
-			float tempSeqScore = L1score(currentSequence->image_members.back()->unit_image_descriptor_sp, currentSequence->image_members.end()[-2]->unit_image_descriptor_sp);
-			endingSeqThres2.push_back(newOld_ratio);
-			endingSeqThres.push_back(newOld_ratio);
-		#endif
 
 		if(currentSequence->image_members.size() > SEQ_SEP_TIME_WINDOW)
 		{
@@ -76,20 +71,12 @@ bool Sequence_Stream_Engine::isTimeToCreateNewSequence()
 				if( currentSequence->image_members.size() == MAX_SEQUENCE_SIZE )
 				{
 					previous_numberOfVisualWords = 0.0f;
-					#ifdef _DEBUG_
-						endingSeqThres.push_back(1.0f);
-					#endif
 					return true;
 				}
 
 				if(newOld_ratio > NEW_OLD_RATIO )
 				{
 					previous_numberOfVisualWords = 0.0f;
-
-					#ifdef _DEBUG_
-						endingSeqThres.push_back(1.0f);
-					#endif
-
 					return true;
 				}
 			}
@@ -140,10 +127,5 @@ void Sequence_Stream_Engine::deallocate()
 		delete currentSequence;
 		stream.clear();
 		allocated = false;
-
-		#ifdef _DEBUG_
-			endingSeqThres.clear();
-			endingSeqThres2.clear();
-		#endif
 	}
 }

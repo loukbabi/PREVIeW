@@ -54,7 +54,6 @@
 #define INVERSE_INDEXING_SEQUENCES_PER_WORD_ESTIMATION (INVERSE_INDEXING_IMAGES_PER_WORD_ESTIMATION * 2)
 
 // #define PROFILER							// Enable Profiler
-#define _DEBUG_								// Printing Debugging info
 #define WITH_TBB_FOR_PIPELINING   	
 
 #define USE_FILETERING

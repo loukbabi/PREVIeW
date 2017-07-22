@@ -41,17 +41,9 @@ public:
 	unsigned char needToBeChecked[MAX_NUMBER_OF_IMAGES];
 	bool allocated;
 	Eigen::Array<float, Eigen::Dynamic, Eigen::Dynamic> similarityMatrix;
-	#ifdef _DEBUG_
-		Eigen::Array<float, Eigen::Dynamic, Eigen::Dynamic> filteredSimilarityMatrix;
-	#endif
 
 	Eigen::Array<float, KERNEL_SIZE, KERNEL_SIZE> filterKernel;
 	Image_Matching_Engine *image_matcher;
-
-	#ifdef _DEBUG_
-		unsigned int debugingCounter;
-	#endif
-
 
 	Sequence_Matching_Engine(Vocabulary_Tree_Engine* Vocabulary_tree_in, Image_Matching_Engine *image_matcher);
 

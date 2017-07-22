@@ -43,10 +43,6 @@ Sequence_Engine::Sequence_Engine(unsigned int sequenceID_in, Vocabulary_Tree_Eng
 	{
 		unit_sequence_descriptor_sp.resize(Vocabulary_tree_in->imgDecrSize, 1);
 		unit_sequence_descriptor_sp.setZero();
-
-		#if defined(PLOT_PIRF) && defined(IMAGE_VISUALIZATION)
-			CV_NAMEDWINDOW("SeePIRFS");
-		#endif
 	}
 
 	allocated = true;
@@ -110,9 +106,6 @@ void Sequence_Engine::deallocate()
 
 
 		image_members.clear();
-		#if defined(PLOT_PIRF) && defined(IMAGE_VISUALIZATION)
-			CV_DESTROYWINDOW("SeePIRFS");
-		#endif
 		allocated = false;
 	}
 }

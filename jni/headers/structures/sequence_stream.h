@@ -19,11 +19,6 @@ public:
 	std::vector<Sequence_Engine*> stream;
 	Sequence_Engine *currentSequence;
 
-	#ifdef _DEBUG_
-		std::vector<float> endingSeqThres;
-		std::vector<float> endingSeqThres2;
-	#endif
-
 	bool isFirstSequence, allocated;
 
 	Sequence_Stream_Engine(Vocabulary_Tree_Engine *Vocabulary_tree_in);

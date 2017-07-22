@@ -156,13 +156,6 @@ public:
 
       myfile.close();
 
-      #ifdef __ANDROID__
-        #ifdef _DEBUG_
-          char systemCommand[156];
-          sprintf(systemCommand, "chmod 777 %s", filePath);
-          system(systemCommand);
-        #endif
-      #endif
     }else
     {
       PRINTF_PLATFORM("Label \"%s\" does not exists. You need to initialize it first.\n", label.c_str());

@@ -57,11 +57,6 @@ Sequence_Matching_Engine::Sequence_Matching_Engine(Vocabulary_Tree_Engine* Vocab
 	similarityMatrix = Eigen::Array<float, Eigen::Dynamic, Eigen::Dynamic>::Zero(MAX_NUMBER_OF_SEQUENCES, MAX_NUMBER_OF_SEQUENCES);
 	filterKernel << FILTER_KERNEL;
 
-#ifdef _DEBUG_
-	filteredSimilarityMatrix = Eigen::Array<float, Eigen::Dynamic, Eigen::Dynamic>::Zero(MAX_NUMBER_OF_SEQUENCES, MAX_NUMBER_OF_SEQUENCES);
-	debugingCounter = 0;
-#endif
-
 	allocated = true;
 }
 
@@ -125,10 +120,6 @@ P_TIC("FindSequenceMatch");
 					tempSimScore /= normScore;
 				#endif
 
-				#ifdef _DEBUG_
-					filteredSimilarityMatrix(tempSequence->sequenceID, lastSequence->sequenceID) = tempSimScore;
-				#endif
-
 				if( tempSimScore > SCORE_THRESHOLD_SEQ && tempSimScore > maxSimScore)
 				{
 			    	maxSimScore = tempSimScore;
@@ -186,13 +177,8 @@ float Sequence_Matching_Engine::filteredL1score(Sequence_Engine* lastSequence, S
 
 	for(int j = loopStart_j; j < loopEnd_j; j++)																					
 		for(int i = loopStart_i; i < loopEnd_i; i++)																				
-			if(similarityMatrix(i,j) == 0.0f)																						
-			{																										
+			if(similarityMatrix(i,j) == 0.0f)																																															
 				similarityMatrix(i,j) = L1score(stream[i]->unit_sequence_descriptor_sp, stream[j]->unit_sequence_descriptor_sp);
-				#ifdef _DEBUG_
-					debugingCounter++;
-				#endif
-			}
 
 	float maxValue = similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j).maxCoeff();
 	return (similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j) / maxValue * filterKernel).sum();
@@ -215,10 +201,6 @@ void Sequence_Matching_Engine::deallocate()
 			delete match_list[i];
 
 		match_list.clear();
-
-		#ifdef _DEBUG_
-			filteredSimilarityMatrix.resize(0,0);
-		#endif
 
 		similarityMatrix.resize(0,0);
 		inverseIndexingList.clear();
