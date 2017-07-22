@@ -164,7 +164,7 @@ bool Vocabulary_Tree_Engine::read_VT_properties(const char *fileName)
 
 	// Printing Tree Properties //
 	PRINTF_PLATFORM("-------------------------\n");
-	PRINTF_PLATFORM("Reading tree with properties:\n  K = %d\n  L = %d\n  scoringType = %d\n  weightingType = %d\n  imgDecrSize = %d\n  numOFnodes = %d\n", K, L, scoringType, weightingType, imgDecrSize, numOFnodes);
+	PRINTF_PLATFORM("Reading tree with properties:\n  K = %d\n  L = %d\n", K, L, scoringType, weightingType, imgDecrSize, numOFnodes);
 	PRINTF_PLATFORM("-------------------------\n");
 	PRINTF_PLATFORM("...\n\n\n");
 	// --- //
