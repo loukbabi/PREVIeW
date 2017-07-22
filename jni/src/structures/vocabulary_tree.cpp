@@ -30,16 +30,18 @@
 #include <Eigen/Sparse>
 
 #include "defines.h"
+
+#include "structures/vocabulary_tree.h"
+#include "structures/feature_extractor.h"
+#include "structures/image.h"
+#include "structures/image_stream.h"
+#include "structures/sequence_matching.h"
+#include "structures/sequence.h"
+#include "structures/sequence_stream.h"
+#include "structures/image_matching.h"
+
 #include "utils.h"
 #include "utils_armNeon.h"
-
-#include "structures/feature_extractor.h"
-#include "structures/vocabulary_tree.h"
-#include "structures/image.h"
-#include "structures/sequence.h"
-#include "structures/image_stream.h"
-#include "structures/image_matching.h"
-#include "structures/sequence_stream.h"
 
 // Shared Timer
 #include "tictoc.h"
@@ -164,7 +166,7 @@ bool Vocabulary_Tree_Engine::read_VT_properties(const char *fileName)
 
 	// Printing Tree Properties //
 	PRINTF_PLATFORM("-------------------------\n");
-	PRINTF_PLATFORM("Reading tree with properties:\n  K = %d\n  L = %d\n", K, L, scoringType, weightingType, imgDecrSize, numOFnodes);
+	PRINTF_PLATFORM("Reading tree with properties:\n  K = %d\n  L = %d\n", K, L);
 	PRINTF_PLATFORM("-------------------------\n");
 	PRINTF_PLATFORM("...\n\n\n");
 	// --- //

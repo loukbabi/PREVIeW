@@ -82,7 +82,7 @@ bool Image_Matching_Engine::findMatch(Image_Engine *lastImage)
 			if(needToBeChecked[imageID])
 			{
 				needToBeChecked[imageID] = 0;
-				float tempSimScore = L1score(lastImage->unit_image_descriptor_sp, tempImage->unit_image_descriptor_sp);
+				float tempSimScore = L2score(lastImage->unit_image_descriptor_sp, tempImage->unit_image_descriptor_sp);
 
 				if( (tempSimScore > SCORE_THRESHOLD_IMG) && (tempSimScore > maxSimScore) )
 				{
@@ -120,7 +120,7 @@ bool Image_Matching_Engine::findImageMembersPairs(Sequence_Engine *lastSequence,
 		int maxImageDist_ID = 0;
 		for(int j = start_matched; j < matched_image_members_Size; j++)
 		{
-			float tempImageSim = L1score(lastSeq_image_members[i]->unit_image_descriptor_sp, matched_image_members[j]->unit_image_descriptor_sp);
+			float tempImageSim = L2score(lastSeq_image_members[i]->unit_image_descriptor_sp, matched_image_members[j]->unit_image_descriptor_sp);
 			if( tempImageSim > SCORE_THRESHOLD_IMG && tempImageSim > maxImageSim)
 			{
 				maxImageSim = tempImageSim;

@@ -23,9 +23,16 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include "structures/feature_extractor.h"
-
 #include "defines.h"
+
+#include "structures/vocabulary_tree.h"
+#include "structures/feature_extractor.h"
+#include "structures/image.h"
+#include "structures/image_stream.h"
+#include "structures/sequence_matching.h"
+#include "structures/sequence.h"
+#include "structures/sequence_stream.h"
+#include "structures/image_matching.h"
 
 // Shared Timer
 #include "profiler.h"

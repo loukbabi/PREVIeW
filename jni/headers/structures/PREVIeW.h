@@ -24,7 +24,6 @@
 #include "profiler.h"
 
 #include "utils.h"
-#include "testers/storeImageDescriptors.h"
 
 // Optional for include tbb (pipelining)
 #ifdef WITH_TBB_FOR_PIPELINING

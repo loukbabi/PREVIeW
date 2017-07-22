@@ -52,7 +52,7 @@ public:
 	bool findMatchANDupdateInverseIndexing_withTimeLag(std::vector<Sequence_Engine*> &stream, cv::Mat &output_UI_img);
 	bool findMatch(std::vector<Sequence_Engine*> &stream, cv::Mat &output_UI_img);
 
-	float filteredL1score(Sequence_Engine* lastSequence, Sequence_Engine *tempSequence, std::vector<Sequence_Engine*> &stream);
+	float filteredL2score(Sequence_Engine* lastSequence, Sequence_Engine *tempSequence, std::vector<Sequence_Engine*> &stream);
 
 	~Sequence_Matching_Engine();
 

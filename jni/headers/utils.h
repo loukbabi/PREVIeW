@@ -16,38 +16,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-inline bool writeDatasetNum(int datasetId, const char* fileName){
-
-	char filePath[64];
-	std::ofstream myfile;
-	sprintf(filePath, "%s/%s.%s", OUTPUT_METADATA_PATH, fileName, OUTPUT_METADATA_FORMAT);
-
-	myfile.open(filePath);
-	if(!myfile.is_open())
-	{
-		PRINTF_PLATFORM("Could not create %s.\n", filePath);
-		return false;
-	}
-
-	myfile << datasetId;
-
-	myfile.close();
-
-	sprintf(filePath, "%s/%s.%s", OUTPUT_METADATA_PATH, fileName, OUTPUT_METADATA_FORMAT);
-
-	myfile.open(filePath);
-	if(!myfile.is_open())
-	{
-		PRINTF_PLATFORM("Could not create %s.\n", filePath);
-		return false;
-	}
-
-	myfile << datasetId;
-
-	myfile.close();
-	return true;
-}
-
 inline void str2ucharLess2Most(std::string &token_8bit, unsigned char *tempBite)
 {
 	unsigned char tempBite2 = 0;
@@ -106,7 +74,7 @@ inline unsigned int HammingDistSparce(Eigen::Matrix<unsigned int, Eigen::Dynamic
 	return sum;
 }
 
-inline float L1score(Eigen::SparseMatrix<float> &unit_image_descriptor1, Eigen::SparseMatrix<float> &unit_image_descriptor2)
+inline float L2score(Eigen::SparseMatrix<float> &unit_image_descriptor1, Eigen::SparseMatrix<float> &unit_image_descriptor2)
 {
 	return ( 1 - ( 0.5*(unit_image_descriptor1 - unit_image_descriptor2).norm() ) );
 }
@@ -181,6 +149,40 @@ inline bool readFolderContent(std::vector<std::string> &out,const std::string &d
 		return false;
 	}
 
+	return true;
+}
+
+inline bool storeImageMatchList(Image_Matching_Engine &image_matcher, unsigned int imageStreamSize, const char* fileName)
+{
+	char filePath[64];
+	sprintf(filePath, "%s/%s.%s", OUTPUT_METADATA_PATH, fileName, OUTPUT_METADATA_FORMAT);
+	std::ofstream myfile;
+	myfile.open(filePath);
+
+	if(!myfile.is_open())
+	{
+		PRINTF_PLATFORM("Could not create file \"%s\".\n", filePath);
+		return false;
+	}
+
+
+	myfile << imageStreamSize << " " << image_matcher.match_list.size() << "\n";
+	if(image_matcher.match_list.size() != 0)
+	{
+		int size = int(image_matcher.match_list.size()) - 1;
+		for (int i = 0; i <= size; i++)
+		{
+			int imgId1 = image_matcher.match_list[i]->pair(0)->imageID;
+			int imgId2 = image_matcher.match_list[i]->pair(1)->imageID;
+			myfile <<imgId1<<" "<<imgId2;
+			if(i != size)
+				myfile << "\n";
+		}
+	}
+
+	myfile.close();
+
+	PRINTF_PLATFORM("Image matching list was stored successfully!\n");
 	return true;
 }
 

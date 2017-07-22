@@ -95,7 +95,7 @@ P_TIC("FindSequenceMatch");
 
 	#ifdef USE_NORMALIZATION
 		Sequence_Engine* previousSequence = stream.end()[-PREVENT_LOOP_FIRST_N_CHECKS_FOR_SEQS_DUE_TO_KERNEL - 2];
-		float normScore = L1score(lastSequence->unit_sequence_descriptor_sp, previousSequence->unit_sequence_descriptor_sp);
+		float normScore = L2score(lastSequence->unit_sequence_descriptor_sp, previousSequence->unit_sequence_descriptor_sp);
 	#endif
 
 	for (Eigen::SparseMatrix<float>::InnerIterator it(lastSequence->unit_sequence_descriptor_sp, 0); it; ++it)
@@ -112,9 +112,9 @@ P_TIC("FindSequenceMatch");
 				needToBeChecked[sequenceID] = 0;
 
 				#ifdef USE_FILETERING
-					float tempSimScore = filteredL1score(lastSequence, tempSequence, stream);
+					float tempSimScore = filteredL2score(lastSequence, tempSequence, stream);
 				#else
-					float tempSimScore = L1score(lastSequence->unit_sequence_descriptor_sp, tempSequence->unit_sequence_descriptor_sp);
+					float tempSimScore = L2score(lastSequence->unit_sequence_descriptor_sp, tempSequence->unit_sequence_descriptor_sp);
 				#endif
 				#ifdef USE_NORMALIZATION
 					tempSimScore /= normScore;
@@ -167,7 +167,7 @@ P_TOC("FindImageMatch");
 	return true;
 }
 
-float Sequence_Matching_Engine::filteredL1score(Sequence_Engine* lastSequence, Sequence_Engine *tempSequence, std::vector<Sequence_Engine*> &stream)
+float Sequence_Matching_Engine::filteredL2score(Sequence_Engine* lastSequence, Sequence_Engine *tempSequence, std::vector<Sequence_Engine*> &stream)
 {
 	int loopStart_j = lastSequence->sequenceID - PREVENT_LOOP_FIRST_N_CHECKS_FOR_SEQS_DUE_TO_KERNEL;
 	int loopEnd_j = loopStart_j + KERNEL_SIZE;
@@ -178,7 +178,7 @@ float Sequence_Matching_Engine::filteredL1score(Sequence_Engine* lastSequence, S
 	for(int j = loopStart_j; j < loopEnd_j; j++)																					
 		for(int i = loopStart_i; i < loopEnd_i; i++)																				
 			if(similarityMatrix(i,j) == 0.0f)																																															
-				similarityMatrix(i,j) = L1score(stream[i]->unit_sequence_descriptor_sp, stream[j]->unit_sequence_descriptor_sp);
+				similarityMatrix(i,j) = L2score(stream[i]->unit_sequence_descriptor_sp, stream[j]->unit_sequence_descriptor_sp);
 
 	float maxValue = similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j).maxCoeff();
 	return (similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j) / maxValue * filterKernel).sum();
