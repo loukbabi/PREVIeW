@@ -180,8 +180,8 @@ void Vocabulary_Tree_Engine::addNodeDependenciesBack(int parent_nodeID_in, bool 
 	NodeID_2_VTptr[VT.back().nodeID] = &(VT.back());
 	if(is_root)
 	{
-		VT.back().parentNode = &(VT.back());  // look at himself
-		VT.back().parentNodeID = 0;			// look at himself
+		VT.back().parentNode = &(VT.back());  // looks at himself
+		VT.back().parentNodeID = 0;			  // looks at himself
 	}
 	else
 	{
