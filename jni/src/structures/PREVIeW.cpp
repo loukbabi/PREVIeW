@@ -227,12 +227,8 @@ bool PREVIeW::storeOutputMetadata()
 
 	#ifdef _DEBUG_
 		PRINTF_PLATFORM("Number of Used images: %u\n", (unsigned int)imageNames.size());
-		PRINTF_PLATFORM("Number of Created Sequences: %u\n", (unsigned int)sequence_stream->stream.size());
 		PRINTF_PLATFORM("Number of Sequence Matches: %u\n", (unsigned int)sequence_matcher->match_list.size());
 		PRINTF_PLATFORM("Number of Image Matches: %u\n", (unsigned int)image_matcher->match_list.size());
-		storeSequenceDescriptorSimilarityMatrix(sequence_matcher->filteredSimilarityMatrix, sequence_stream->stream.back()->sequenceID, "filteredSimMatrixSeq");
-		PRINTF_PLATFORM("Number of actual L1score calculations during filtering: %u\n", sequence_matcher->debugingCounter);
-		storeSequenceDescriptorSimilarityMatrix(sequence_matcher->similarityMatrix, sequence_stream->stream.back()->sequenceID, "simMatrixSeq");
 	#endif
 
 	storeImageMatchList(*image_matcher, image_stream->stream.size(), "imageMatches");
