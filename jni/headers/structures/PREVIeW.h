@@ -35,6 +35,7 @@ class PREVIeW{
 private:
 bool allocated;
 bool experiment_executed;
+unsigned int dropedImageCount;
 
 cv::Mat UI_img;
 cv::Mat input_UI_img;

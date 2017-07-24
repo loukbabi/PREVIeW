@@ -134,6 +134,7 @@ bool PREVIeW::deploy_fromMemory()
 	// Starting Input Stream
 	PRINTF_PLATFORM("=======================================\n");
 	PRINTF_PLATFORM("   Starting Input Stream...\n");
+	dropedImageCount = 0;
 	for(unsigned int i = 0; i < imageNames.size(); i++)
 	{
 		P_TIC("ReadImgFromMemory");
@@ -166,6 +167,7 @@ cv::Mat* PREVIeW::addImage(cv::Mat &inputImage)
 	bool newImageAdded = image_stream->add_new_image( inputImage, totalImgCount++, input_UI_img);
 	if(  newImageAdded  )
 	{
+		dropedImageCount = 0;
 		P_TIC("FormSVWVs");
 		bool flag = sequence_stream->createNewSequenceIfisTime();
 		P_TOC("FormSVWVs");
@@ -188,9 +190,29 @@ cv::Mat* PREVIeW::addImage(cv::Mat &inputImage)
 		acquiredImagesCount++;
 	}else
 	{
+		if(dropedImageCount == 0)
+		{
+			if (sequence_stream->currentSequence->image_members.size() > SEQ_SEP_MIN_SEQUENCE_SIZE)
+			{
+				P_TIC("FormSVWVs");
+				sequence_stream->createNewSequence();
+				P_TOC("FormSVWVs");
+
+				TBB_TASK(sequence_matcher->findMatchANDupdateInverseIndexing_withTimeLag(sequence_stream->stream, output_UI_img));
+			}else
+			{
+				Sequence_Engine *newSequence = new Sequence_Engine(sequence_stream->stream.size(), Vocabulary_tree);
+				sequence_stream->currentSequence->deallocate();
+				delete sequence_stream->currentSequence;
+				sequence_stream->currentSequence = newSequence;
+			}
+			
+
+			
+			// dropedImageCount = 0;
+		}
+		dropedImageCount++;
 		// extra tic-tocs for retaining the same amount of measurements for every timer
-		P_TIC("FormSVWVs");
-		P_TOC("FormSVWVs");
 		P_TIC("InverseIndexingUpdate");
 		P_TOC("InverseIndexingUpdate");
 		P_TIC("FindSequenceMatch");

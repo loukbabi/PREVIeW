@@ -41,6 +41,7 @@ extern bool endProcessByUser;
 Image_Matching_Engine::Image_Matching_Engine(Vocabulary_Tree_Engine* Vocabulary_tree_in)
 {
 	Vocabulary_tree = Vocabulary_tree_in;
+	imageMatches.reserve(2*ESTIMATED_IMAGE_MEMBERS);
 	allocated = true;
 }
 
@@ -109,9 +110,10 @@ bool Image_Matching_Engine::findImageMembersPairs(Sequence_Engine *lastSequence,
 	std::vector<Image_Engine*> &lastSeq_image_members = lastSequence->image_members;
 	int matched_image_members_Size = int(matched_image_members.size());
 	int lastSeq_image_members_Size = int(lastSeq_image_members.size());
-	std::vector<int> imageMatches;
 
 	int start_matched = 0;
+
+	imageMatchesAggregation.setZero();
 
 	for(int i = 0; i < lastSeq_image_members_Size; i++)
 	{
@@ -127,8 +129,10 @@ bool Image_Matching_Engine::findImageMembersPairs(Sequence_Engine *lastSequence,
 				maxImageDist_ID = j;
 			}
 		}
+
 		if(maxImageSim != -10.0f)
 		{
+			imageMatchesAggregation(maxImageDist_ID)++;
 			start_matched = maxImageDist_ID;
 			imageMatches.push_back(i);
 			imageMatches.push_back(maxImageDist_ID);
@@ -139,13 +143,26 @@ bool Image_Matching_Engine::findImageMembersPairs(Sequence_Engine *lastSequence,
 	{
 
 		if(imageMatches[1] == imageMatches.back() || imageMatches[0] == imageMatches.end()[-2]) // if all the matches have been done with the same image from the matched_sequence = if that database image hase very few feature points
+		{
+			imageMatches.resize(0);
 			return false;
+		}
+
+		unsigned int max_imageMatchesAggregation = imageMatchesAggregation.maxCoeff();
+
+		if (float(max_imageMatchesAggregation)/float(lastSeq_image_members_Size) > TEMPORAL_CONSISTENCY_TOLERANCE ) // if the majority of matches have been done with the same image from the matched_sequence = if that database image hase very few feature points
+		{
+			imageMatches.resize(0);
+			return false;
+		}
 
 		for(unsigned int i = 0; i < imageMatches.size(); i+=2)
 		{
 			Image_Match *newMatch = new Image_Match(lastSeq_image_members[imageMatches[i]], matched_image_members[imageMatches[i+1]], maxSimScore);
 			match_list.push_back(newMatch);
 		}
+
+		imageMatches.resize(0);
 		return true;
 	}
 	else
@@ -166,6 +183,7 @@ void Image_Matching_Engine::deallocate()
 			delete match_list[i];
 
 		match_list.clear();
+		imageMatches.clear();
 		allocated = false;
 	}
 }

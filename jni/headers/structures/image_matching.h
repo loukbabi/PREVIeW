@@ -33,7 +33,9 @@ class Image_Matching_Engine{
 
 public:
 	std::vector<Image_Match*> match_list;
-
+	Eigen::Array<unsigned int, ESTIMATED_IMAGE_MEMBERS, 1> imageMatchesAggregation;
+	std::vector<int> imageMatches;
+	
 	std::vector< std::vector<Image_Engine*> > inverseIndexingList;
 	Vocabulary_Tree_Engine* Vocabulary_tree;
 	unsigned char needToBeChecked[MAX_NUMBER_OF_IMAGES];

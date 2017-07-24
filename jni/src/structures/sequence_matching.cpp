@@ -133,16 +133,9 @@ P_TIC("FindSequenceMatch");
 P_TOC("FindSequenceMatch");
 
 	if(matchingSequenceTemp == NULL)	return false;
-
-	PRINTF_PLATFORM("Adding Sequence Pair: <%u, %u>.\n", lastSequence->sequenceID, matchingSequenceTemp->sequenceID);
-
-	Sequence_Match *newMatch = new Sequence_Match(lastSequence, matchingSequenceTemp, maxSimScore);
-	match_list.push_back(newMatch);
-
-
-	matchingSequenceTemp->image_members[0]->Image.copyTo(output_UI_img);
 	
 P_TIC("FindImageMatch");
+	bool flag;
 	#ifdef MULTIPLE_SEQUENCE_MATCHING
 		Sequence_Engine sequenceMatch(0, Vocabulary_tree);
 
@@ -156,14 +149,24 @@ P_TIC("FindImageMatch");
 	    std::copy(tempSequence->image_members.begin(), tempSequence->image_members.end(), 
 	    	std::back_inserter(sequenceMatch.image_members));
 
-		image_matcher->findImageMembersPairs(lastSequence, &sequenceMatch, maxSimScore);
-
+		flag = image_matcher->findImageMembersPairs(lastSequence, &sequenceMatch, maxSimScore);
 
 		sequenceMatch.deallocate();
 	#else
-		image_matcher->findImageMembersPairs(lastSequence, matchedSequences, maxSimScore);
+		flag = image_matcher->findImageMembersPairs(lastSequence, matchingSequenceTemp, maxSimScore);
 	#endif
 P_TOC("FindImageMatch");
+
+	if(!flag)
+		return false;
+	
+	PRINTF_PLATFORM("Adding Sequence Pair: <%u, %u>.\n", lastSequence->sequenceID, matchingSequenceTemp->sequenceID);
+
+	Sequence_Match *newMatch = new Sequence_Match(lastSequence, matchingSequenceTemp, maxSimScore);
+	match_list.push_back(newMatch);
+
+	matchingSequenceTemp->image_members[0]->Image.copyTo(output_UI_img);
+
 	return true;
 }
 
@@ -181,7 +184,8 @@ float Sequence_Matching_Engine::filteredL2score(Sequence_Engine* lastSequence, S
 				similarityMatrix(i,j) = L2score(stream[i]->unit_sequence_descriptor_sp, stream[j]->unit_sequence_descriptor_sp);
 
 	float maxValue = similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j).maxCoeff();
-	return (similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j) / maxValue * filterKernel).sum();
+
+	return ( (similarityMatrix.block<KERNEL_SIZE, KERNEL_SIZE>(loopStart_i, loopStart_j) / maxValue) * filterKernel).sum();
 }
 
 Sequence_Matching_Engine::~Sequence_Matching_Engine()

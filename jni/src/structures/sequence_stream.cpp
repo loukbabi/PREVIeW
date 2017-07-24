@@ -70,7 +70,7 @@ bool Sequence_Stream_Engine::isTimeToCreateNewSequence()
 		{
 			if(currentSequence->image_members.size() > SEQ_SEP_MIN_SEQUENCE_SIZE)
 			{
-				if( currentSequence->image_members.size() == MAX_SEQUENCE_SIZE )
+				if( Vocabulary_tree->nonZeroDescriptorIDs_seq.size() > MAX_VW_SEQUENCE_SIZE )
 				{
 					previous_numberOfVisualWords = 0.0f;
 					return true;
