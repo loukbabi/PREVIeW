@@ -25,7 +25,7 @@
 #define VOCABULARY_TREE_FILE_FORMAT "voc"
 
 #define INPUT_IMAGE_FORMAT  "png"
-#define INPUT_IMAGE_PREFIX "SVS_T_"
+//  #define INPUT_IMAGE_PREFIX "SVS_T_"
 //  #define INPUT_IMAGE_ENDFIX ""
 
 
